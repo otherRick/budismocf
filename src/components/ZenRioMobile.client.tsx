@@ -316,25 +316,6 @@ const MobileFirstMeditation = () => {
   );
 };
 
-// Sample data
-const events = [
-  {
-    title: 'Meditação Online',
-    time: 'Qua, 19:30',
-    location: 'Zoom'
-  },
-  {
-    title: 'Retiro de Silêncio',
-    time: 'Sáb, 08:00',
-    location: 'Praia do Forte'
-  },
-  {
-    title: 'Mindfulness Iniciantes',
-    time: 'Sex, 18:00',
-    location: 'Centro Cultural'
-  }
-];
-
 const teachings = [
   {
     title: 'Atenção Plena',

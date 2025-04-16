@@ -444,25 +444,6 @@ const UltraModernMeditation = () => {
   );
 };
 
-// Sample data
-const events = [
-  {
-    title: 'Meditação Guiada Online',
-    time: 'Quarta, 19:30',
-    location: 'Zoom (link via email)'
-  },
-  {
-    title: 'Retiro de Silêncio',
-    time: 'Sábado, 08:00',
-    location: 'Praia do Forte, Cabo Frio'
-  },
-  {
-    title: 'Mindfulness para Iniciantes',
-    time: 'Sexta, 18:00',
-    location: 'Centro Cultural'
-  }
-];
-
 const teachings = [
   {
     title: 'Atenção Plena',
