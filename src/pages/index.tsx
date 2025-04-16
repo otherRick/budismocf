@@ -2,7 +2,6 @@ import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { isMobile } from 'react-device-detect';
-import AdminEvents from './admin/events';
 
 const UltraModernMeditation = dynamic(() => import('../components/ZenRioWeb.client'), {
   ssr: false
@@ -125,9 +124,7 @@ const HomePage = () => {
         </script>
       </Head>
 
-      {/* Render appropriate component */}
       {isMobile ? <MobileFirstMeditation /> : <UltraModernMeditation />}
-      {/* <AdminEvents /> */}
     </div>
   );
 };
