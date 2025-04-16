@@ -68,7 +68,12 @@ export default function AboutSection() {
   );
 }
 
-function FAQItem({ faq, index }: { faq: any; index: number }) {
+type FAQ = {
+  question: string;
+  answer: string;
+};
+
+function FAQItem({ faq, index }: { faq: FAQ; index: number }) {
   const [isOpen, setIsOpen] = useState(index === 0);
 
   return (

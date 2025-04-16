@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import Head from 'next/head';
-import { motion, AnimatePresence, useMotionValue, useTransform } from 'framer-motion';
+import { motion, AnimatePresence, useMotionValue } from 'framer-motion';
 import { FiCalendar, FiClock, FiMapPin, FiSend, FiArrowRight } from 'react-icons/fi';
 
 export default function UltraModernMeditation() {
