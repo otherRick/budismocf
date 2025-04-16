@@ -1,12 +1,34 @@
+'use client';
+
 import { useState, useEffect } from 'react';
 import Head from 'next/head';
-import { motion, AnimatePresence, useMotionValue } from 'framer-motion';
-import { FiCalendar, FiClock, FiMapPin, FiSend, FiArrowRight } from 'react-icons/fi';
+import { motion, AnimatePresence, useMotionValue, useTransform } from 'framer-motion';
+import { FiCalendar, FiSend, FiArrowRight } from 'react-icons/fi';
+import EventCard, { Event } from './WebEventCard';
 
 const UltraModernMeditation = () => {
   const [activeTeaching, setActiveTeaching] = useState(0);
   const [cursorPosition, setCursorPosition] = useState({ x: 0, y: 0 });
   const [isHoveringCTA, setIsHoveringCTA] = useState(false);
+
+  const [events, setEvents] = useState<Event[]>([]);
+
+  useEffect(() => {
+    const fetchEvents = async () => {
+      try {
+        const response = await fetch('/api/events');
+        if (!response.ok) {
+          throw new Error('Erro ao buscar eventos');
+        }
+        const data = await response.json();
+        setEvents(data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchEvents();
+  }, []);
 
   // Custom cursor position tracking
   useEffect(() => {
@@ -28,8 +50,8 @@ const UltraModernMeditation = () => {
   // Dynamic gradient position based on cursor
   const cursorX = useMotionValue(0);
   const cursorY = useMotionValue(0);
-  // const backgroundX = useTransform(cursorX, [0, window.innerWidth], [-20, 20]);
-  // const backgroundY = useTransform(cursorY, [0, window.innerHeight], [-20, 20]);
+  const backgroundX = useTransform(cursorX, [0, window.innerWidth], [-20, 20]);
+  const backgroundY = useTransform(cursorY, [0, window.innerHeight], [-20, 20]);
 
   useEffect(() => {
     cursorX.set(cursorPosition.x);
@@ -71,9 +93,9 @@ const UltraModernMeditation = () => {
           className='absolute inset-0 opacity-90'
           style={{
             background:
-              'radial-gradient(circle at center, rgba(125, 211, 252, 0.15) 0%, rgba(217, 119, 6, 0.1) 50%, rgba(15, 23, 42, 1) 100%)'
-            // x: backgroundX,
-            // y: backgroundY
+              'radial-gradient(circle at center, rgba(125, 211, 252, 0.15) 0%, rgba(217, 119, 6, 0.1) 50%, rgba(15, 23, 42, 1) 100%)',
+            x: backgroundX,
+            y: backgroundY
           }}
         />
 
@@ -170,27 +192,8 @@ const UltraModernMeditation = () => {
               </div>
 
               <div className='space-y-4 relative z-10'>
-                {events.map((event, index) => (
-                  <motion.div
-                    key={index}
-                    whileHover={{ y: -2 }}
-                    className='p-4 bg-gray-700/30 rounded-xl border border-gray-600/30 backdrop-blur-sm hover:border-amber-400/30 transition-all'
-                  >
-                    <h3 className='font-medium text-white'>{event.title}</h3>
-                    <div className='flex items-center text-sm text-blue-300 mt-2'>
-                      <FiClock className='mr-2' /> {event.time}
-                    </div>
-                    <div className='flex items-center text-sm text-blue-300 mt-1'>
-                      <FiMapPin className='mr-2' /> {event.location}
-                    </div>
-                    <motion.button
-                      whileTap={{ scale: 0.95 }}
-                      className='mt-3 w-full flex items-center justify-center space-x-2 bg-amber-500/10 hover:bg-amber-500/20 text-amber-400 py-2 rounded-lg text-sm transition-all border border-amber-500/20 hover:border-amber-500/40'
-                    >
-                      <span>Reservar</span>
-                      <FiArrowRight size={14} />
-                    </motion.button>
-                  </motion.div>
+                {events.map((event: Event) => (
+                  <EventCard key={event.id} event={event} />
                 ))}
               </div>
 

@@ -1,20 +1,34 @@
+'use client';
+
 import { useState, useEffect } from 'react';
 import Head from 'next/head';
 import { motion, AnimatePresence } from 'framer-motion';
-import {
-  FiArrowRight,
-  FiCalendar,
-  FiClock,
-  FiInstagram,
-  FiMapPin,
-  FiSend,
-  FiYoutube
-} from 'react-icons/fi';
+import { FiArrowRight, FiCalendar, FiInstagram, FiSend, FiYoutube } from 'react-icons/fi';
 import { AiFillWechat } from 'react-icons/ai';
+import EventCard, { Event } from './WebEventCard';
 
 const MobileFirstMeditation = () => {
   const [activeTab, setActiveTab] = useState('meditation');
   const [activeTeaching, setActiveTeaching] = useState(0);
+
+  const [events, setEvents] = useState<Event[]>([]);
+
+  useEffect(() => {
+    const fetchEvents = async () => {
+      try {
+        const response = await fetch('/api/events');
+        if (!response.ok) {
+          throw new Error('Erro ao buscar eventos');
+        }
+        const data = await response.json();
+        setEvents(data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchEvents();
+  }, []);
 
   // Auto-rotate teachings
   useEffect(() => {
@@ -127,24 +141,8 @@ const MobileFirstMeditation = () => {
                   </h2>
 
                   <div className='space-y-3'>
-                    {events.map((event, index) => (
-                      <motion.div
-                        key={index}
-                        whileTap={{ scale: 0.98 }}
-                        className='p-3 bg-gray-700/40 rounded-lg border border-gray-600/30'
-                      >
-                        <h3 className='font-medium text-white'>{event.title}</h3>
-                        <div className='flex items-center text-xs text-blue-300 mt-1'>
-                          <FiClock className='mr-1' /> {event.time}
-                        </div>
-                        <div className='flex items-center text-xs text-blue-300 mt-1'>
-                          <FiMapPin className='mr-1' /> {event.location}
-                        </div>
-                        <button className='mt-2 w-full flex items-center justify-center space-x-1 bg-amber-500/10 hover:bg-amber-500/20 text-amber-400 py-1.5 rounded text-xs transition-all border border-amber-500/20'>
-                          <span>Reservar</span>
-                          <FiArrowRight size={12} />
-                        </button>
-                      </motion.div>
+                    {events.map((event: Event) => (
+                      <EventCard key={event.id} event={event} />
                     ))}
                   </div>
 
