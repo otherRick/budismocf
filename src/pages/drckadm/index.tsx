@@ -1,10 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
 
 export default function AdminPage() {
-  const router = useRouter();
   const [formData, setFormData] = useState({
     title: '',
     date: '',

@@ -5,7 +5,7 @@ const pool = new Pool({
   ssl: true
 });
 
-export async function query(text: string, params?: any[]) {
+export async function query(text: string, params: (string | number | null)[] = []) {
   const client = await pool.connect();
   try {
     return await client.query(text, params);
