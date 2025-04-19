@@ -4,14 +4,15 @@ import { useState, useEffect } from 'react';
 import Head from 'next/head';
 import { motion, AnimatePresence, useMotionValue, useTransform } from 'framer-motion';
 import { FiCalendar, FiSend, FiArrowRight } from 'react-icons/fi';
-import EventCard, { Event } from './WebEventCard';
+import EventCard from './WebEventCard';
+import { FormDataProps } from '@/types/formData';
 
 const UltraModernMeditation = () => {
   const [activeTeaching, setActiveTeaching] = useState(0);
   const [cursorPosition, setCursorPosition] = useState({ x: 0, y: 0 });
   const [isHoveringCTA, setIsHoveringCTA] = useState(false);
 
-  const [events, setEvents] = useState<Event[]>([]);
+  const [events, setEvents] = useState<FormDataProps[]>([]);
 
   useEffect(() => {
     const fetchEvents = async () => {
@@ -173,13 +174,13 @@ const UltraModernMeditation = () => {
           </header>
 
           {/* Main Grid */}
-          <main className='grid grid-cols-1 lg:grid-cols-3 gap-8 flex-1'>
+          <main className='grid grid-cols-1 lg:grid-cols-3 gap-8 flex-1 h-96'>
             {/* Left Column - Events */}
             <motion.div
               initial={{ opacity: 0, x: -50 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8, delay: 0.6 }}
-              className='bg-gray-800/50 backdrop-blur-lg rounded-2xl p-6 border border-gray-700/50 shadow-xl overflow-hidden'
+              className='bg-gray-800/50 backdrop-blur-lg rounded-2xl p-6 border border-gray-700/50 shadow-xl overflow-auto'
             >
               <div className='relative'>
                 <h2 className='text-xl font-bold text-white mb-6 flex items-center'>
@@ -192,7 +193,7 @@ const UltraModernMeditation = () => {
               </div>
 
               <div className='space-y-4 relative z-10'>
-                {events.map((event: Event) => (
+                {events.map((event: FormDataProps) => (
                   <EventCard key={event.id} event={event} />
                 ))}
               </div>

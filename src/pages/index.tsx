@@ -1,7 +1,9 @@
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
+import { useEffect } from 'react';
 import { isMobile } from 'react-device-detect';
+import { toast } from 'react-toastify';
 
 const UltraModernMeditation = dynamic(() => import('../components/ZenRioWeb.client'), {
   ssr: false
@@ -13,7 +15,23 @@ const MobileFirstMeditation = dynamic(() => import('../components/ZenRioMobile.c
 const HomePage = () => {
   const router = useRouter();
   const canonicalUrl = `https://www.zenriocabofrio.com.br${router.asPath}`;
+  useEffect(() => {
+    const showToast = localStorage.getItem('showEventCreatedToast');
+    if (showToast) {
+      toast.success('Evento criado com sucesso!', {
+        position: 'top-center',
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'colored'
+      });
 
+      localStorage.removeItem('showEventCreatedToast');
+    }
+  }, []);
   return (
     <div className='relative'>
       <Head>
@@ -123,7 +141,6 @@ const HomePage = () => {
           })}
         </script>
       </Head>
-
       {isMobile ? <MobileFirstMeditation /> : <UltraModernMeditation />}
     </div>
   );

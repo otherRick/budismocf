@@ -5,13 +5,14 @@ import Head from 'next/head';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FiArrowRight, FiCalendar, FiInstagram, FiSend, FiYoutube } from 'react-icons/fi';
 import { AiFillWechat } from 'react-icons/ai';
-import EventCard, { Event } from './WebEventCard';
+import EventCard from './WebEventCard';
+import { FormDataProps } from '@/types/formData';
 
 const MobileFirstMeditation = () => {
   const [activeTab, setActiveTab] = useState('meditation');
   const [activeTeaching, setActiveTeaching] = useState(0);
 
-  const [events, setEvents] = useState<Event[]>([]);
+  const [events, setEvents] = useState<FormDataProps[]>([]);
 
   useEffect(() => {
     const fetchEvents = async () => {
@@ -21,6 +22,7 @@ const MobileFirstMeditation = () => {
           throw new Error('Erro ao buscar eventos');
         }
         const data = await response.json();
+        console.log(data);
         setEvents(data);
       } catch (error) {
         console.error(error);
@@ -141,9 +143,9 @@ const MobileFirstMeditation = () => {
                   </h2>
 
                   <div className='space-y-3'>
-                    {events.map((event: Event) => (
-                      <EventCard key={event.id} event={event} />
-                    ))}
+                    {events.map((event: FormDataProps) => {
+                      return <EventCard key={event.id} event={event} />;
+                    })}
                   </div>
 
                   <div className='mt-6'>

@@ -1,5 +1,6 @@
 'use client';
 
+import { useRouter } from 'next/router';
 import { useState } from 'react';
 
 export default function AdminPage() {
@@ -8,9 +9,53 @@ export default function AdminPage() {
     date: '',
     hour: '',
     meeting_link: '',
-    map_link: '',
-    description: ''
+    description: '',
+    address: {
+      cep: '',
+      street: '',
+      number: '',
+      complement: '',
+      neighborhood: '',
+      city: '',
+      state: ''
+    }
   });
+
+  const router = useRouter();
+
+  const fetchAddress = async (cep: string) => {
+    // Remove any non-digit characters
+    const cleanedCep = cep.replace(/\D/g, '');
+
+    // Check if CEP is complete (8 digits)
+    if (cleanedCep.length !== 8) return;
+
+    try {
+      const response = await fetch(`https://viacep.com.br/ws/${cleanedCep}/json/`);
+      const data = await response.json();
+
+      if (!data.erro) {
+        setFormData((prev) => ({
+          ...prev,
+          address: {
+            ...prev.address,
+            street: data.logradouro || '',
+            neighborhood: data.bairro || '',
+            city: data.localidade || '',
+            state: data.uf || '',
+            // Keep existing values for number and complement
+            number: prev.address.number,
+            complement: prev.address.complement
+          }
+        }));
+      } else {
+        alert('CEP não encontrado');
+      }
+    } catch (error) {
+      console.error('Erro ao buscar CEP:', error);
+      alert('Erro ao buscar CEP');
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -23,20 +68,30 @@ export default function AdminPage() {
         body: JSON.stringify(formData)
       });
 
-      const data = await response.json(); // Add this line
+      const data = await response.json();
 
       if (response.ok) {
-        alert('Evento criado com sucesso!');
         setFormData({
           title: '',
           date: '',
           hour: '',
           meeting_link: '',
-          map_link: '',
-          description: ''
+          description: '',
+          address: {
+            cep: '',
+            street: '',
+            number: '',
+            complement: '',
+            neighborhood: '',
+            city: '',
+            state: ''
+          }
         });
+
+        localStorage.setItem('showEventCreatedToast', 'true');
+        window.location.href = '/';
       } else {
-        throw new Error(data.error || 'Falha ao criar evento'); // Use server error message
+        throw new Error(data.error || 'Falha ao criar evento');
       }
     } catch (error) {
       alert(error instanceof Error ? error.message : 'Erro desconhecido');
@@ -46,12 +101,43 @@ export default function AdminPage() {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
+
+    // Special handling for CEP field
+    if (name === 'address.cep') {
+      setFormData((prev) => ({
+        ...prev,
+        address: {
+          ...prev.address,
+          cep: value
+        }
+      }));
+
+      // Trigger address lookup when CEP is complete
+      if (value.replace(/\D/g, '').length === 8) {
+        fetchAddress(value);
+      }
+      return;
+    }
+
+    // Handle nested address fields
+    if (name.startsWith('address.')) {
+      const field = name.split('.')[1];
+      setFormData((prev) => ({
+        ...prev,
+        address: {
+          ...prev.address,
+          [field]: value
+        }
+      }));
+      return;
+    }
+
+    // Handle regular fields
     setFormData((prev) => ({
       ...prev,
       [name]: value
     }));
   };
-
   return (
     <div className='min-h-screen bg-gray-100 py-12 px-4 sm:px-6 lg:px-8'>
       <div className='max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden md:max-w-2xl'>
@@ -120,20 +206,115 @@ export default function AdminPage() {
               />
             </div>
 
-            <div>
-              <label htmlFor='map_link' className='block text-sm font-medium text-gray-700'>
-                Link do Mapa (Google Maps)
-              </label>
-              <input
-                type='url'
-                name='map_link'
-                id='map_link'
-                value={formData.map_link}
-                onChange={handleChange}
-                className='mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-amber-500 focus:border-amber-500'
-              />
-            </div>
+            <div className='space-y-4'>
+              <div>
+                <label htmlFor='cep' className='block text-sm font-medium text-gray-700'>
+                  CEP
+                </label>
+                <input
+                  type='text'
+                  name='address.cep'
+                  id='cep'
+                  value={formData?.address?.cep}
+                  onChange={handleChange}
+                  className='mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-amber-500 focus:border-amber-500'
+                  placeholder='00000-000'
+                />
+              </div>
 
+              <div className='grid grid-cols-3 gap-4'>
+                <div className='col-span-2'>
+                  <label htmlFor='street' className='block text-sm font-medium text-gray-700'>
+                    Logradouro
+                  </label>
+                  <input
+                    type='text'
+                    name='address.street'
+                    id='street'
+                    value={formData.address.street}
+                    onChange={handleChange}
+                    className='mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-amber-500 focus:border-amber-500'
+                    readOnly
+                  />
+                </div>
+                <div>
+                  <label htmlFor='number' className='block text-sm font-medium text-gray-700'>
+                    Número
+                  </label>
+                  <input
+                    type='text'
+                    name='address.number'
+                    id='number'
+                    value={formData.address.number}
+                    onChange={handleChange}
+                    className='mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-amber-500 focus:border-amber-500'
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label htmlFor='complement' className='block text-sm font-medium text-gray-700'>
+                  Complemento
+                </label>
+                <input
+                  type='text'
+                  name='address.complement'
+                  id='complement'
+                  value={formData.address.complement}
+                  onChange={handleChange}
+                  className='mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-amber-500 focus:border-amber-500'
+                />
+              </div>
+
+              <div className='grid grid-cols-2 gap-4'>
+                <div>
+                  <label
+                    htmlFor='neighborhood'
+                    className='block text-sm font-medium text-gray-700'
+                  >
+                    Bairro
+                  </label>
+                  <input
+                    type='text'
+                    name='address.neighborhood'
+                    id='neighborhood'
+                    value={formData.address.neighborhood}
+                    onChange={handleChange}
+                    className='mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-amber-500 focus:border-amber-500'
+                    readOnly
+                  />
+                </div>
+                <div>
+                  <label htmlFor='city' className='block text-sm font-medium text-gray-700'>
+                    Cidade
+                  </label>
+                  <input
+                    type='text'
+                    name='address.city'
+                    id='city'
+                    value={formData.address.city}
+                    onChange={handleChange}
+                    className='mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-amber-500 focus:border-amber-500'
+                    readOnly
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label htmlFor='state' className='block text-sm font-medium text-gray-700'>
+                  Estado
+                </label>
+                <input
+                  type='text'
+                  name='address.state'
+                  id='state'
+                  value={formData.address.state}
+                  onChange={handleChange}
+                  className='mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-amber-500 focus:border-amber-500'
+                  readOnly
+                />
+              </div>
+            </div>
             <div>
               <label htmlFor='description' className='block text-sm font-medium text-gray-700'>
                 Descrição
@@ -147,11 +328,17 @@ export default function AdminPage() {
                 className='mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-amber-500 focus:border-amber-500'
               />
             </div>
-
-            <div>
+            <div className='flex space-x-4'>
+              <button
+                type='button'
+                onClick={() => router.push('/')}
+                className='flex-1 justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-500'
+              >
+                Voltar
+              </button>
               <button
                 type='submit'
-                className='w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-amber-600 hover:bg-amber-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-500'
+                className='flex-1 justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-amber-600 hover:bg-amber-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-500'
               >
                 Criar Evento
               </button>

@@ -24,12 +24,12 @@ async function handleGet(req: NextApiRequest, res: NextApiResponse) {
 
 async function handlePost(req: NextApiRequest, res: NextApiResponse) {
   try {
-    const { title, date, hour, meeting_link, map_link, description } = req.body;
+    const { title, date, hour, meeting_link, description, address } = req.body;
 
     const result = await query(
-      `INSERT INTO events (title, date, hour, meeting_link, map_link, description)
-       VALUES ($1, $2, $3, $4, $5, $6) RETURNING *`,
-      [title, date, hour, meeting_link, map_link, description]
+      `INSERT INTO events (title, date, hour, meeting_link, description, address)
+   VALUES ($1, $2, $3, $4, $5, $6) RETURNING *`,
+      [title, date, hour, meeting_link, description, JSON.stringify(address)]
     );
 
     res.status(201).json(result.rows[0]);
