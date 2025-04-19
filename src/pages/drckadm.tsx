@@ -23,6 +23,8 @@ export default function AdminPage() {
         body: JSON.stringify(formData)
       });
 
+      const data = await response.json(); // Add this line
+
       if (response.ok) {
         alert('Evento criado com sucesso!');
         setFormData({
@@ -34,10 +36,11 @@ export default function AdminPage() {
           description: ''
         });
       } else {
-        throw new Error('Falha ao criar evento');
+        throw new Error(data.error || 'Falha ao criar evento'); // Use server error message
       }
     } catch (error) {
       alert(error instanceof Error ? error.message : 'Erro desconhecido');
+      console.error('Error:', error); // Add logging
     }
   };
 
