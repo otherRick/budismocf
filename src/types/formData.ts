@@ -30,3 +30,29 @@ export type Event = {
   updatedAt: string;
   publishedAt: string;
 };
+
+export interface FilterProps {
+  date: string;
+  location: string;
+  type: 'all' | 'online' | 'in-person';
+}
+
+export interface EventFiltersProps {
+  onFilterChange: (filters: FilterProps) => void;
+  initialDate?: string;
+  initialLocation?: string;
+}
+
+export interface MounseEventProps {
+  onMouseEnter?: () => void;
+  onMouseLeave?: () => void;
+}
+
+export interface Article {
+  id: number;
+  slug: string;
+  title: string;
+  description: string;
+  content: string;
+  image_url?: string;
+}

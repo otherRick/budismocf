@@ -7,12 +7,13 @@ import { FiArrowRight, FiCalendar, FiInstagram, FiSend, FiYoutube } from 'react-
 import { AiFillWechat } from 'react-icons/ai';
 import EventCard from './WebEventCard';
 import { FormDataProps } from '@/types/formData';
+import EnjoyBtn from './buttons/EnjoyBtn';
 
 const MobileFirstMeditation = () => {
   const [activeTab, setActiveTab] = useState('meditation');
   const [activeTeaching, setActiveTeaching] = useState(0);
 
-  const [events, setEvents] = useState<FormDataProps[]>([]);
+  const [events, setEvents] = useState<{ events: FormDataProps[] }>();
 
   useEffect(() => {
     const fetchEvents = async () => {
@@ -90,12 +91,7 @@ const MobileFirstMeditation = () => {
               <p className='text-xs text-blue-300/80'>Cabo Frio · RJ</p>
             </div>
 
-            <motion.button
-              whileTap={{ scale: 0.95 }}
-              className='px-4 py-2 bg-amber-500/90 hover:bg-amber-600 text-white text-sm rounded-lg transition-colors'
-            >
-              Participar
-            </motion.button>
+            <EnjoyBtn />
           </motion.header>
 
           {/* Mobile Navigation Tabs */}
@@ -143,7 +139,7 @@ const MobileFirstMeditation = () => {
                   </h2>
 
                   <div className='space-y-3'>
-                    {events.map((event: FormDataProps) => {
+                    {events?.events?.map((event: FormDataProps) => {
                       return <EventCard key={event.id} event={event} />;
                     })}
                   </div>
@@ -212,10 +208,6 @@ const MobileFirstMeditation = () => {
                       Encontre Paz
                     </span>
                   </h2>
-
-                  <p className='text-blue-200 text-center mb-6 max-w-xs mx-auto text-sm'>
-                    Sessões de meditação em Cabo Frio e online
-                  </p>
 
                   <motion.button
                     whileTap={{ scale: 0.95 }}

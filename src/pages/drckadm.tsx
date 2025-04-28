@@ -1,5 +1,6 @@
 'use client';
 
+import EventList from '@/components/EventList';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 
@@ -327,6 +328,9 @@ export default function AdminPage() {
                 onChange={handleChange}
                 className='mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-amber-500 focus:border-amber-500'
               />
+            </div>
+            <div className='mt-8'>
+              <EventList />
             </div>
             <div className='flex space-x-4'>
               <button
