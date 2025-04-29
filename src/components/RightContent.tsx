@@ -45,7 +45,7 @@ export default function RightContent() {
       initial={{ opacity: 0, x: 50 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ duration: 0.8, delay: 0.6 }}
-      className='bg-gray-800/50 backdrop-blur-lg rounded-2xl p-6 border border-gray-700/50 shadow-xl overflow-hidden'
+      className='bg-gray-800/50 backdrop-blur-lg rounded-2xl p-6 border border-gray-700/50 shadow-xl overflow-hidden scroll-hidden '
     >
       <div className='relative'>
         <h2 className='text-xl font-bold text-white mb-6'>

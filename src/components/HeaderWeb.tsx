@@ -5,13 +5,13 @@ import { useRouter } from 'next/router';
 export default function HeaderWeb({ onMouseEnter, onMouseLeave }: MounseEventProps) {
   const route = useRouter();
   return (
-    <header className='flex justify-between items-center mb-8 w-full'>
+    <header className='md:flex justify-between items-center mb-8 w-full hidden z-50'>
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, delay: 0.2 }}
       >
-        <h1 className='text-2xl md:text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-amber-600'>
+        <h1 className='text-2xl md:text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-amber-600 '>
           ZenRio
         </h1>
         <p className='text-sm text-blue-300/80'>Cabo Frio · RJ</p>
@@ -23,11 +23,17 @@ export default function HeaderWeb({ onMouseEnter, onMouseLeave }: MounseEventPro
         transition={{ duration: 0.6, delay: 0.4 }}
         className='hidden md:flex space-x-8'
       >
-        {['Eventos', 'Meditar', 'Sabedorias', 'BudaBlog'].map((item) => {
+        {['Eventos', 'Meditar', 'Sabedorias', 'Blog'].map((item) => {
           return (
             <button
               key={item}
-              onClick={() => route.push(`/${item.toLowerCase()}`)}
+              onClick={() => {
+                if (item === 'Meditar') {
+                  route.push('/');
+                } else {
+                  route.push(`/${item.toLowerCase()}`);
+                }
+              }}
               className='relative text-blue-100/80 hover:text-white transition-colors group'
             >
               {item}

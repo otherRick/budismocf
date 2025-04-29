@@ -1,4 +1,6 @@
-import { useState } from 'react';
+'use client';
+
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -20,30 +22,71 @@ type FormData = {
 export default function AdminPage() {
   const { register, handleSubmit, setValue, watch, reset } = useForm<FormData>();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [editingSlug, setEditingSlug] = useState<string | null>(null);
+
+  const [artigos, setArtigos] = useState<FormData[]>([]);
+
+  useEffect(() => {
+    const fetchArtigos = async () => {
+      const res = await fetch('/api/artigos');
+      const data = await res.json();
+      setArtigos(data);
+    };
+    fetchArtigos();
+  }, []);
 
   const content = watch('content');
 
   const onSubmit = async (data: FormData) => {
     setIsSubmitting(true);
+    const method = editingSlug ? 'PUT' : 'POST';
+
     try {
-      const res = await fetch('/api/artigos', {
-        method: 'POST',
+      const res = await fetch(`/api/artigos${editingSlug ? `/${editingSlug}` : ''}`, {
+        method,
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data)
       });
 
       if (res.ok) {
-        toast.success('Artigo criado com sucesso!');
+        toast.success(`Artigo ${editingSlug ? 'atualizado' : 'criado'} com sucesso!`);
         reset();
+        setEditingSlug(null);
+        const updated = await fetch('/api/artigos').then((r) => r.json());
+        setArtigos(updated);
       } else {
         const erro = await res.json();
-        toast.error(`Erro: ${erro.error || 'Falha ao salvar.'}`);
+        toast.error(`Erro: ${erro.error || 'Falha.'}`);
       }
     } catch (error) {
-      console.error('Erro inesperado ao salvar:', error);
-      toast.error('Erro inesperado ao salvar.');
+      toast.error(`Erro inesperado. ${error}`);
     } finally {
       setIsSubmitting(false);
+    }
+  };
+
+  const handleEdit = (artigo: FormData) => {
+    setEditingSlug(artigo.slug);
+    setValue('title', artigo.title);
+    setValue('slug', artigo.slug); // Se quiser desabilitar edição do slug, use `disabled`
+    setValue('description', artigo.description || '');
+    setValue('content', artigo.content);
+    setValue('image_url', artigo.image_url || '');
+  };
+
+  const handleDelete = async (slug: string) => {
+    if (!confirm('Tem certeza que deseja deletar este artigo?')) return;
+
+    try {
+      const res = await fetch(`/api/artigos/${slug}`, { method: 'DELETE' });
+      if (res.ok) {
+        toast.success('Artigo deletado.');
+        setArtigos((prev) => prev.filter((a) => a.slug !== slug));
+      } else {
+        toast.error('Erro ao deletar.');
+      }
+    } catch (err) {
+      toast.error(`Erro inesperado. ${err}`);
     }
   };
 
@@ -117,6 +160,36 @@ export default function AdminPage() {
           {isSubmitting ? 'Salvando...' : 'Salvar Artigo'}
         </button>
       </form>
+      <hr className='my-8 border-gray-700' />
+
+      <h2 className='text-2xl font-semibold mb-4 text-white'>Artigos Existentes</h2>
+      <ul className='space-y-4'>
+        {artigos.map((artigo) => (
+          <li
+            key={artigo.slug}
+            className='p-4 bg-gray-800 rounded flex justify-between items-center'
+          >
+            <div>
+              <p className='text-white font-medium'>{artigo.title}</p>
+              <p className='text-sm text-gray-400'>{artigo.slug}</p>
+            </div>
+            <div className='flex gap-2'>
+              <button
+                onClick={() => handleEdit(artigo)}
+                className='px-3 py-1 bg-yellow-500 text-white rounded'
+              >
+                Editar
+              </button>
+              <button
+                onClick={() => handleDelete(artigo.slug)}
+                className='px-3 py-1 bg-red-600 text-white rounded'
+              >
+                Deletar
+              </button>
+            </div>
+          </li>
+        ))}
+      </ul>
 
       <ToastContainer position='bottom-right' />
     </div>

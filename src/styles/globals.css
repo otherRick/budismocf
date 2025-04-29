@@ -36,3 +36,32 @@ body {
   background: #f59e0b;
   border-radius: 3px;
 }
+
+@keyframes twinkle {
+  0%,
+  100% {
+    opacity: 0.3;
+    transform: scale(0.8);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.2);
+  }
+}
+
+.star {
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+  transform: translateZ(0);
+}
+
+/* Para todos os navegadores modernos */
+.scroll-hidden {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* Internet Explorer e Edge antigos */
+}
+
+/* Para navegadores baseados em Webkit (Chrome, Safari, Edge novo, Opera) */
+.scroll-hidden::-webkit-scrollbar {
+  display: none;
+}
