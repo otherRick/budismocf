@@ -34,6 +34,34 @@ type AnalyticsData = {
   }[];
 };
 
+type VercelAnalyticsResponse = {
+  uniques?: {
+    total: number;
+    prev_total: number;
+  };
+  views?: {
+    total: number;
+    prev_total: number;
+    data: Array<{
+      date: string;
+      uniques: number;
+    }>;
+  };
+  avgTimeOnPage?: number;
+  topPages?: Array<{
+    path: string;
+    views: number;
+  }>;
+  topSources?: Array<{
+    source: string;
+    uniques: number;
+  }>;
+  topCountries?: Array<{
+    country: string;
+    uniques: number;
+  }>;
+};
+
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<AnalyticsData | { error: string; details?: string; hint?: string }>
@@ -139,12 +167,12 @@ export default async function handler(
     const transformedData = transformAnalyticsData(analyticsResponse, timeRange);
 
     return res.status(200).json(transformedData);
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Error fetching analytics data:', error);
     // Return a more detailed error message
     return res.status(500).json({
       error: 'Failed to fetch analytics data',
-      details: error.message || 'Unknown error',
+      details: error instanceof Error ? error.message : 'Unknown error',
       hint: 'This might be because you are in development mode or the Vercel API token is not configured correctly.'
     });
   }
@@ -161,7 +189,7 @@ async function fetchVercelAnalytics(
 
   // Calculate date range based on timeRange
   const endDate = new Date();
-  let startDate = new Date();
+  const startDate = new Date();
 
   switch (timeRange) {
     case '7d':
@@ -201,7 +229,10 @@ async function fetchVercelAnalytics(
   return await response.json();
 }
 
-function transformAnalyticsData(vercelData: any, timeRange: string): AnalyticsData {
+function transformAnalyticsData(
+  vercelData: VercelAnalyticsResponse,
+  timeRange: string
+): AnalyticsData {
   // This is a placeholder implementation
   // In a real implementation, you would transform the Vercel API response to match your expected format
 
@@ -210,11 +241,11 @@ function transformAnalyticsData(vercelData: any, timeRange: string): AnalyticsDa
   return {
     visitors: {
       count: vercelData.uniques?.total || 0,
-      change: calculateChange(vercelData.uniques?.total, vercelData.uniques?.prev_total)
+      change: calculateChange(vercelData.uniques?.total || 0, vercelData.uniques?.prev_total || 0)
     },
     pageViews: {
       count: vercelData.views?.total || 0,
-      change: calculateChange(vercelData.views?.total, vercelData.views?.prev_total)
+      change: calculateChange(vercelData.views?.total || 0, vercelData.views?.prev_total || 0)
     },
     avgTimeOnSite: {
       count: formatTime(vercelData.avgTimeOnPage || 0),
@@ -239,8 +270,8 @@ function formatTime(seconds: number): string {
 }
 
 function generateVisitorsByDay(
-  viewsData: any[],
-  _timeRange: string // Prefix with underscore to indicate it's not used
+  viewsData: Array<{ date: string; uniques: number }>,
+  _timeRange: string // eslint-disable-line @typescript-eslint/no-unused-vars
 ): { day: string; visitors: number }[] {
   // If we have real data, transform it
   if (viewsData && viewsData.length > 0) {
@@ -258,7 +289,9 @@ function generateVisitorsByDay(
   }));
 }
 
-function generateTopPages(topPagesData: any[]): { path: string; title: string; views: number }[] {
+function generateTopPages(
+  topPagesData: Array<{ path?: string; views?: number }>
+): { path: string; title: string; views: number }[] {
   // If we have real data, transform it
   if (topPagesData && topPagesData.length > 0) {
     return topPagesData.slice(0, 5).map((page) => ({
@@ -292,7 +325,7 @@ function getPageTitle(path: string): string {
 }
 
 function generateTopSources(
-  topSourcesData: any[]
+  topSourcesData: Array<{ source?: string; uniques?: number }>
 ): { name: string; visitors: number; percentage: number }[] {
   // If we have real data, transform it
   if (topSourcesData && topSourcesData.length > 0) {
@@ -300,7 +333,7 @@ function generateTopSources(
     return topSourcesData.slice(0, 4).map((source) => ({
       name: source.source || 'Direct',
       visitors: source.uniques || 0,
-      percentage: Math.round((source.uniques / total) * 100) || 0
+      percentage: Math.round(((source.uniques || 0) / total) * 100) || 0
     }));
   }
 
@@ -314,7 +347,7 @@ function generateTopSources(
 }
 
 function generateTopCountries(
-  topCountriesData: any[]
+  topCountriesData: Array<{ country?: string; uniques?: number }>
 ): { name: string; visitors: number; percentage: number }[] {
   // If we have real data, transform it
   if (topCountriesData && topCountriesData.length > 0) {
@@ -322,7 +355,7 @@ function generateTopCountries(
     return topCountriesData.slice(0, 4).map((country) => ({
       name: country.country || 'Unknown',
       visitors: country.uniques || 0,
-      percentage: Math.round((country.uniques / total) * 100) || 0
+      percentage: Math.round(((country.uniques || 0) / total) * 100) || 0
     }));
   }
 

@@ -38,6 +38,7 @@ const Blog = () => {
         year: 'numeric'
       });
     } catch (error) {
+      console.error('Error formatting date:', error);
       return '';
     }
   };
@@ -225,10 +226,10 @@ const Blog = () => {
                       <div className='p-6'>
                         {/* Metadados do artigo */}
                         <div className='flex items-center text-blue-300/70 text-xs mb-3 space-x-4'>
-                          {article.created_at && (
+                          {article.id && (
                             <div className='flex items-center'>
                               <FiCalendar className='mr-1' />
-                              <span>{formatDate(article.created_at)}</span>
+                              <span>{article.id ? formatDate(article.id.toString()) : ''}</span>
                             </div>
                           )}
                           <div className='flex items-center'>
