@@ -18,6 +18,8 @@ import Link from 'next/link';
 import EventList from '@/components/EventList';
 import AnalyticsDashboard from '@/components/admin/AnalyticsDashboard';
 import useIsMobile from '@/hooks/useIsMobile';
+import { GetServerSideProps } from 'next';
+import { verify } from 'jsonwebtoken';
 
 // Dynamically import the Markdown editor to avoid SSR issues
 const MdEditor = dynamic(() => import('react-markdown-editor-lite'), { ssr: false });
@@ -50,6 +52,38 @@ type EventFormData = {
 };
 
 type TabType = 'dashboard' | 'articles' | 'events' | 'analytics';
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const { req } = context;
+  const token = req.cookies.admin_token;
+
+  if (!token) {
+    return {
+      redirect: {
+        destination: '/login',
+        permanent: false
+      }
+    };
+  }
+
+  try {
+    // Verificar JWT
+    verify(token, process.env.JWT_SECRET || 'fallback_secret');
+
+    // Token válido, permitir acesso
+    return { props: {} };
+  } catch (error) {
+    // Token inválido, redirecionar para login
+    console.log('Token inválido, redirecionando para login', error);
+
+    return {
+      redirect: {
+        destination: '/login',
+        permanent: false
+      }
+    };
+  }
+};
 
 export default function AdminDashboard() {
   const router = useRouter();
