@@ -15,20 +15,20 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   try {
-    // Verificar se já existe algum admin
-    const countResult = await query('SELECT COUNT(*) FROM admin_users');
+    // Verificar se já existe algum admin master
+    const countResult = await query('SELECT COUNT(*) FROM admin_users WHERE is_master = true');
 
-    // Opcional: permitir apenas um admin
+    // Permitir apenas um admin master
     if (parseInt(countResult.rows[0].count) > 0) {
-      return res.status(403).json({ error: 'Já existe um administrador registrado' });
+      return res.status(403).json({ error: 'Já existe um administrador master registrado' });
     }
 
     // Hash da senha
     const passwordHash = await hash(password, 12);
 
-    // Inserir usuário
+    // Inserir usuário como admin master
     const result = await query(
-      'INSERT INTO admin_users (username, password_hash) VALUES ($1, $2) RETURNING id, username',
+      'INSERT INTO admin_users (username, password_hash, is_master) VALUES ($1, $2, true) RETURNING id, username',
       [username, passwordHash]
     );
 

@@ -11,7 +11,8 @@ import {
   FiBarChart2,
   FiLogOut,
   FiMenu,
-  FiX
+  FiX,
+  FiUsers
 } from 'react-icons/fi';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
@@ -25,6 +26,7 @@ import { verify } from 'jsonwebtoken';
 const MdEditor = dynamic(() => import('react-markdown-editor-lite'), { ssr: false });
 import 'react-markdown-editor-lite/lib/index.css';
 import ReactMarkdown from 'react-markdown';
+import AdminList from '@/components/admin/AdminList';
 
 type FormData = {
   title: string;
@@ -51,7 +53,12 @@ type EventFormData = {
   };
 };
 
-type TabType = 'dashboard' | 'articles' | 'events' | 'analytics';
+type AdminFormData = {
+  username: string;
+  password: string;
+};
+
+type TabType = 'dashboard' | 'articles' | 'events' | 'analytics' | 'admins';
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { req } = context;
@@ -116,6 +123,15 @@ export default function AdminDashboard() {
       state: ''
     }
   });
+
+  // Admin state
+  const [adminFormData, setAdminFormData] = useState<AdminFormData>({
+    username: '',
+    password: ''
+  });
+
+  // Admin status
+  const [isAdminMaster, setIsAdminMaster] = useState(false);
 
   // Set active tab based on URL query parameter
   useEffect(() => {
@@ -292,13 +308,85 @@ export default function AdminDashboard() {
     }
   };
 
+  // Admin form handlers
+  const handleAdminChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setAdminFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleAdminSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      const response = await fetch('/api/auth/add-admin', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(adminFormData)
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        toast.success('Administrador adicionado com sucesso!');
+        setAdminFormData({
+          username: '',
+          password: ''
+        });
+      } else {
+        throw new Error(data.error || 'Falha ao adicionar administrador');
+      }
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : 'Erro desconhecido');
+    }
+  };
+
+  // Check admin status
+  useEffect(() => {
+    const checkAdminStatus = async () => {
+      try {
+        const res = await fetch('/api/auth/verify');
+        const data = await res.json();
+        if (data.authenticated && data.user.isMaster) {
+          setIsAdminMaster(true);
+        }
+      } catch (error) {
+        console.error('Error checking admin status:', error);
+      }
+    };
+
+    checkAdminStatus();
+  }, []);
+
   // Navigation items
   const navItems = [
     { name: 'Dashboard', icon: <FiHome />, tab: 'dashboard' },
     { name: 'Artigos', icon: <FiFileText />, tab: 'articles' },
     { name: 'Eventos', icon: <FiCalendar />, tab: 'events' },
-    { name: 'Analytics', icon: <FiBarChart2 />, tab: 'analytics' }
+    { name: 'Analytics', icon: <FiBarChart2 />, tab: 'analytics' },
+    ...(isAdminMaster ? [{ name: 'Administradores', icon: <FiUsers />, tab: 'admins' }] : [])
   ];
+
+  // Adicione esta função para lidar com o logout
+  const handleLogout = async () => {
+    try {
+      const res = await fetch('/api/auth/logout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' }
+      });
+
+      if (res.ok) {
+        toast.success('Logout realizado com sucesso');
+        // Redirecionar para a página inicial após o logout
+        router.push('/');
+      } else {
+        throw new Error('Falha ao realizar logout');
+      }
+    } catch (error) {
+      toast.error('Erro ao realizar logout');
+      console.error(error);
+    }
+  };
 
   return (
     <div className='flex flex-col md:flex-row min-h-screen bg-gradient-to-br from-gray-900 to-gray-800 relative'>
@@ -318,7 +406,7 @@ export default function AdminDashboard() {
           </div>
           <div>
             <button
-              onClick={() => router.push('/')}
+              onClick={handleLogout}
               className='p-2 text-gray-400 hover:text-white hover:bg-gray-700/50 rounded-lg'
             >
               <FiLogOut size={20} />
@@ -367,11 +455,11 @@ export default function AdminDashboard() {
         {!isMobile && (
           <div className='absolute bottom-4 left-4 right-4'>
             <button
-              onClick={() => router.push('/')}
+              onClick={handleLogout}
               className='flex items-center w-full p-3 text-gray-400 hover:text-white hover:bg-gray-700/50 rounded-lg transition-all'
             >
               <FiLogOut className='mr-3' />
-              <span>Voltar ao Site</span>
+              <span>Sair</span>
             </button>
           </div>
         )}
@@ -713,6 +801,69 @@ export default function AdminDashboard() {
         )}
 
         {activeTab === 'analytics' && <AnalyticsDashboard />}
+
+        {activeTab === 'admins' && isAdminMaster && (
+          <div className='space-y-6'>
+            <h1 className='text-2xl md:text-3xl font-bold text-white mb-4 md:mb-6'>
+              Gerenciar Administradores
+            </h1>
+
+            <div className='grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6'>
+              <form
+                onSubmit={handleAdminSubmit}
+                className='space-y-3 md:space-y-4 bg-gray-800/50 backdrop-blur-sm rounded-xl border border-gray-700/50 p-4 md:p-6'
+              >
+                <h2 className='text-lg md:text-xl font-semibold text-white'>
+                  Adicionar Novo Administrador
+                </h2>
+
+                <div>
+                  <label className='block text-xs md:text-sm font-medium text-white mb-1'>
+                    Nome de Usuário
+                  </label>
+                  <input
+                    type='text'
+                    name='username'
+                    required
+                    value={adminFormData.username}
+                    onChange={handleAdminChange}
+                    className='w-full p-2 border rounded bg-gray-700 text-white border-gray-600 text-sm md:text-base'
+                  />
+                </div>
+
+                <div>
+                  <label className='block text-xs md:text-sm font-medium text-white mb-1'>
+                    Senha
+                  </label>
+                  <input
+                    type='password'
+                    name='password'
+                    required
+                    value={adminFormData.password}
+                    onChange={handleAdminChange}
+                    className='w-full p-2 border rounded bg-gray-700 text-white border-gray-600 text-sm md:text-base'
+                  />
+                </div>
+
+                <div className='flex justify-end'>
+                  <button
+                    type='submit'
+                    className='px-4 py-1.5 md:px-6 md:py-2 bg-amber-600 text-white rounded hover:bg-amber-700 text-sm md:text-base'
+                  >
+                    Adicionar Administrador
+                  </button>
+                </div>
+              </form>
+
+              <div className='bg-gray-800/50 backdrop-blur-sm rounded-xl border border-gray-700/50 p-4 md:p-6'>
+                <h2 className='text-lg md:text-xl font-semibold text-white mb-3 md:mb-4'>
+                  Administradores Existentes
+                </h2>
+                <AdminList />
+              </div>
+            </div>
+          </div>
+        )}
       </div>
 
       <ToastContainer

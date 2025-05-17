@@ -18,7 +18,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     };
 
     // Verificar se o usuário ainda existe no banco
-    const result = await query('SELECT id FROM admin_users WHERE id = $1', [decoded.id]);
+    const result = await query('SELECT id, is_master FROM admin_users WHERE id = $1', [
+      decoded.id
+    ]);
 
     if (result.rows.length === 0) {
       return res.status(401).json({ authenticated: false });
@@ -27,7 +29,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     // Usuário autenticado
     return res.status(200).json({
       authenticated: true,
-      user: { id: decoded.id, username: decoded.username }
+      user: {
+        id: decoded.id,
+        username: decoded.username,
+        isMaster: result.rows[0].is_master
+      }
     });
   } catch (error) {
     console.error('Auth verification error:', error);
