@@ -15,7 +15,7 @@ class MyDocument extends Document {
               __html: JSON.stringify({
                 '@context': 'http://schema.org',
                 '@type': 'Event',
-                name: 'Prática de Meditação Online em Cabo Frio',
+                name: 'Prática de Meditação Online na Dimensão virtual',
                 startDate: '2025-04-30T20:00:00',
                 endDate: '2025-04-30T21:00:00',
                 eventAttendanceMode: 'http://schema.org/OnlineEventAttendanceMode',
@@ -23,15 +23,15 @@ class MyDocument extends Document {
                 location: {
                   '@type': 'Place',
                   name: 'Online',
-                  url: 'https://seu-site.com'
+                  url: 'https://www.dojoroom.com'
                 },
                 organizer: {
                   '@type': 'Organization',
-                  name: 'Meditação Cabo Frio',
-                  url: 'https://seu-site.com'
+                  name: 'Meditação Dimensão virtual',
+                  url: 'https://www.dojoroom.com'
                 },
                 description:
-                  'Participe da prática de meditação online ao vivo em Cabo Frio. Experimente alívio do estresse e relaxamento profundo.'
+                  'Participe da prática de meditação online ao vivo na Dimensão virtual. Experimente alívio do estresse e relaxamento profundo.'
               })
             }}
           />

@@ -1,4 +1,4 @@
 # public/robots.txt
 User-agent: *
 Allow: /
-Sitemap: https://www.zenriocabofrio.com.br/sitemap.xml
+Sitemap: https://www.dojoroom.com/sitemap.xml

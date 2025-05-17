@@ -10,7 +10,7 @@ export default function MobileFooter() {
       transition={{ delay: 0.4 }}
       className='flex justify-between items-center pt-3 border-t border-gray-700/50 text-xs md:hidden'
     >
-      <p className='text-blue-300/70'>© {new Date().getFullYear()} ZenRio</p>
+      <p className='text-blue-300/70'>© {new Date().getFullYear()} DojoRoom</p>
 
       <div className='flex space-x-4'>
         <a href='#' className='text-blue-300 hover:text-amber-400'>

@@ -313,7 +313,7 @@ export default function AdminDashboard() {
               {sidebarOpen ? <FiX size={24} /> : <FiMenu size={24} />}
             </button>
             <h1 className='text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-amber-600'>
-              ZenRio Admin
+              DojoRoom Admin
             </h1>
           </div>
           <div>
@@ -340,7 +340,7 @@ export default function AdminDashboard() {
         {!isMobile && (
           <div className='mb-8 p-4'>
             <h1 className='text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-amber-600'>
-              ZenRio Admin
+              DojoRoom Admin
             </h1>
             <p className='text-sm text-blue-300/80'>Painel de Controle</p>
           </div>

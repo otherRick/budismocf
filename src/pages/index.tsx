@@ -5,16 +5,16 @@ import { useEffect } from 'react';
 import { isMobile } from 'react-device-detect';
 import { toast } from 'react-toastify';
 
-const UltraModernMeditation = dynamic(() => import('../components/ZenRioWeb.client'), {
+const UltraModernMeditation = dynamic(() => import('../components/DojoRoomWeb.client'), {
   ssr: false
 });
-const MobileFirstMeditation = dynamic(() => import('../components/ZenRioMobile.client'), {
+const MobileFirstMeditation = dynamic(() => import('../components/DojoRoomMobile.client'), {
   ssr: false
 });
 
 const HomePage = () => {
   const router = useRouter();
-  const canonicalUrl = `https://www.zenriocabofrio.com.br${router.asPath}`;
+  const canonicalUrl = `https://www.dojoroom.com${router.asPath}`;
   useEffect(() => {
     const showToast = localStorage.getItem('showEventCreatedToast');
     if (showToast) {
@@ -36,18 +36,18 @@ const HomePage = () => {
     <div className='relative'>
       <Head>
         {/* Primary Meta Tags */}
-        <title>Meditação em Cabo Frio | ZenRio - Sessões Online e Presenciais</title>
+        <title>Meditação na Dimensão virtual | DojoRoom - Sessões Online e Presenciais</title>
         <meta
           name='title'
-          content='Meditação em Cabo Frio | ZenRio - Sessões Online e Presenciais'
+          content='Meditação na Dimensão virtual | DojoRoom - Sessões Online e Presenciais'
         />
         <meta
           name='description'
-          content='Grupo de meditação em Cabo Frio. Participe de nossas sessões presenciais na Região dos Lagos ou online. Aprenda técnicas de mindfulness e redução de estresse.'
+          content='Grupo de meditação na Dimensão virtual. Participe de nossas sessões presenciais na Terra pura virtual ou online. Aprenda técnicas de mindfulness e redução de estresse.'
         />
         <meta
           name='keywords'
-          content='meditação, Cabo Frio, mindfulness, Rio de Janeiro, redução de estresse, paz interior, grupo de meditação, zen, budismo'
+          content='meditação, Dimensão virtual, mindfulness, Terra pura virtual, redução de estresse, paz interior, grupo de meditação, zen, budismo'
         />
 
         {/* Canonical URL */}
@@ -58,29 +58,29 @@ const HomePage = () => {
         <meta property='og:url' content={canonicalUrl} />
         <meta
           property='og:title'
-          content='Meditação em Cabo Frio | ZenRio - Sessões Online e Presenciais'
+          content='Meditação na Dimensão virtual | DojoRoom - Sessões Online e Presenciais'
         />
         <meta
           property='og:description'
-          content='Grupo de meditação em Cabo Frio. Participe de nossas sessões presenciais na Região dos Lagos ou online.'
+          content='Grupo de meditação na Dimensão virtual. Participe de nossas sessões presenciais na Terra pura virtual ou online.'
         />
         <meta
           property='og:image'
           content='https://equilibrius.com.br/wp-content/uploads/2023/02/meditacao-aprender-beneficios.jpg'
         />
         <meta property='og:locale' content='pt_BR' />
-        <meta property='og:site_name' content='ZenRio Meditação' />
+        <meta property='og:site_name' content='DojoRoom Meditação' />
 
         {/* Twitter */}
         <meta property='twitter:card' content='summary_large_image' />
         <meta property='twitter:url' content={canonicalUrl} />
         <meta
           property='twitter:title'
-          content='Meditação em Cabo Frio | ZenRio - Sessões Online e Presenciais'
+          content='Meditação na Dimensão virtual | DojoRoom - Sessões Online e Presenciais'
         />
         <meta
           property='twitter:description'
-          content='Grupo de meditação em Cabo Frio. Participe de nossas sessões presenciais na Região dos Lagos ou online.'
+          content='Grupo de meditação na Dimensão virtual. Participe de nossas sessões presenciais na Terra pura virtual ou online.'
         />
         <meta
           property='twitter:image'
@@ -88,8 +88,8 @@ const HomePage = () => {
         />
 
         {/* Local Business SEO */}
-        <meta name='geo.region' content='BR-RJ' />
-        <meta name='geo.placename' content='Cabo Frio' />
+        <meta name='geo.region' content='Dimensão virtual' />
+        <meta name='geo.placename' content='Terra pura virtual' />
         <meta name='geo.position' content='-22.8784;-42.0188' />
         <meta name='ICBM' content='-22.8784, -42.0188' />
         <meta name='robots' content='index, follow' />
@@ -108,15 +108,15 @@ const HomePage = () => {
           {JSON.stringify({
             '@context': 'https://schema.org',
             '@type': 'LocalBusiness',
-            name: 'ZenRio Meditação',
+            name: 'DojoRoom Meditação',
             image:
               'https://equilibrius.com.br/wp-content/uploads/2023/02/meditacao-aprender-beneficios.jpg',
-            description: 'Grupo de meditação em Cabo Frio, Rio de Janeiro',
+            description: 'Grupo de meditação na Dimensão virtual, Terra pura virtual',
             address: {
               '@type': 'PostalAddress',
               streetAddress: 'Av. dos Buzios, 500',
-              addressLocality: 'Cabo Frio',
-              addressRegion: 'RJ',
+              addressLocality: 'Terra pura virtual',
+              addressRegion: 'Dimensão virtual',
               postalCode: '28909-000',
               addressCountry: 'BR'
             },
@@ -125,7 +125,7 @@ const HomePage = () => {
               latitude: '-22.8784',
               longitude: '-42.0188'
             },
-            url: 'https://zenrio.vercel.app/',
+            url: 'https://www.dojoroom.com/',
             telephone: '+5522999999999',
             priceRange: 'R$0-R$200',
             openingHoursSpecification: {
@@ -134,10 +134,7 @@ const HomePage = () => {
               opens: '07:00',
               closes: '20:30'
             },
-            sameAs: [
-              'https://www.instagram.com/zenriocabofrio',
-              'https://www.facebook.com/zenriocabofrio'
-            ]
+            sameAs: ['https://www.instagram.com/dojoroom', 'https://www.facebook.com/dojoroom']
           })}
         </script>
       </Head>

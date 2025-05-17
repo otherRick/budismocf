@@ -9,8 +9,8 @@ export default function Footer() {
       className='md:flex hidden justify-between items-center pt-6 border-t border-gray-700/50'
     >
       <div>
-        <p className='text-sm text-blue-300/80'>© {new Date().getFullYear()} ZenRio Meditação</p>
-        <p className='text-xs text-blue-400/50'>Cabo Frio · Região dos Lagos · RJ</p>
+        <p className='text-sm text-blue-300/80'>© {new Date().getFullYear()} DojoRoom Meditação</p>
+        <p className='text-xs text-blue-400/50'>Dimensão virtual · Terra pura virtual</p>
       </div>
 
       <div className='flex space-x-6'>

@@ -12,9 +12,9 @@ export default function HeaderWeb({ onMouseEnter, onMouseLeave }: MounseEventPro
         transition={{ duration: 0.6, delay: 0.2 }}
       >
         <h1 className='text-2xl md:text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-amber-600 '>
-          ZenRio
+          DojoRoom
         </h1>
-        <p className='text-sm text-blue-300/80'>Cabo Frio · RJ</p>
+        <p className='text-sm text-blue-300/80'>Dimensão virtual</p>
       </motion.div>
 
       <motion.nav

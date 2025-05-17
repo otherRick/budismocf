@@ -46,16 +46,16 @@ interface SEOConfig {
 }
 
 const defaultSEO: SEOConfig = {
-  title: 'ZenRio Meditação | Cabo Frio - RJ',
-  titleTemplate: '%s | ZenRio Meditação',
+  title: 'DojoRoom Meditação | Dimensão virtual',
+  titleTemplate: '%s | DojoRoom Meditação',
   description:
-    'Grupo de meditação em Cabo Frio. Sessões presenciais na Região dos Lagos e online. Aprenda mindfulness, redução de estresse e encontre paz interior.',
-  canonical: 'https://zenrio.vercel.app/',
+    'Grupo de meditação na Dimensão virtual. Sessões presenciais na Terra pura virtual e online. Aprenda mindfulness, redução de estresse e encontre paz interior.',
+  canonical: 'https://www.dojoroom.com/',
   keywords: [
-    'meditação Cabo Frio',
-    'grupo de meditação RJ',
-    'mindfulness Região dos Lagos',
-    'zen budismo Rio de Janeiro',
+    'meditação Dimensão virtual',
+    'grupo de meditação Terra pura virtual',
+    'mindfulness Dimensão virtual',
+    'zen budismo Terra pura virtual',
     'aulas de meditação online',
     'redução de estresse',
     'yoga e meditação',
@@ -64,26 +64,26 @@ const defaultSEO: SEOConfig = {
   openGraph: {
     type: 'website',
     locale: 'pt_BR',
-    url: 'https://zenrio.vercel.app/',
-    site_name: 'ZenRio Meditação',
+    url: 'https://www.dojoroom.com/',
+    site_name: 'DojoRoom Meditação',
     images: [
       {
         url: 'https://equilibrius.com.br/wp-content/uploads/2023/02/meditacao-aprender-beneficios.jpg',
         width: 1200,
         height: 630,
-        alt: 'ZenRio Meditação - Grupo de meditação em Cabo Frio'
+        alt: 'DojoRoom Meditação - Grupo de meditação na Dimensão virtual'
       },
       {
         url: 'https://equilibrius.com.br/wp-content/uploads/2023/02/meditacao-aprender-beneficios.jpg',
         width: 1000,
         height: 1000,
-        alt: 'ZenRio Meditação - Grupo de meditação em Cabo Frio'
+        alt: 'DojoRoom Meditação - Grupo de meditação na Dimensão virtual'
       }
     ]
   },
   twitter: {
-    handle: '@zenriocabofrio',
-    site: '@zenriocabofrio',
+    handle: '@dojoroom',
+    site: '@dojoroom',
     cardType: 'summary_large_image'
   },
   additionalMetaTags: [
@@ -97,11 +97,11 @@ const defaultSEO: SEOConfig = {
     },
     {
       name: 'geo.region',
-      content: 'BR-RJ'
+      content: 'Dimensão virtual'
     },
     {
       name: 'geo.placename',
-      content: 'Cabo Frio'
+      content: 'Terra pura virtual'
     },
     {
       name: 'geo.position',
@@ -117,11 +117,11 @@ const defaultSEO: SEOConfig = {
     }
   ],
   localBusiness: {
-    name: 'ZenRio Meditação',
+    name: 'DojoRoom Meditação',
     address: {
       streetAddress: 'Av. dos Búzios, 500',
-      addressLocality: 'Cabo Frio',
-      addressRegion: 'RJ',
+      addressLocality: 'Terra pura virtual',
+      addressRegion: 'Dimensão virtual',
       postalCode: '28909-000',
       addressCountry: 'BR'
     },

@@ -74,20 +74,20 @@ const Blog = () => {
   const blogSchema = {
     '@context': 'https://schema.org',
     '@type': 'Blog',
-    headline: 'Blog ZenRio - Artigos sobre Meditação e Bem-estar',
+    headline: 'Blog DojoRoom - Artigos sobre Meditação e Bem-estar',
     description:
       'Artigos sobre meditação, mindfulness e práticas para bem-estar mental e espiritual.',
     author: {
       '@type': 'Organization',
-      name: 'ZenRio Meditação',
-      url: 'https://zenrio.vercel.app'
+      name: 'DojoRoom Meditação',
+      url: 'https://www.dojoroom.com'
     },
     publisher: {
       '@type': 'Organization',
-      name: 'ZenRio Meditação',
+      name: 'DojoRoom Meditação',
       logo: {
         '@type': 'ImageObject',
-        url: 'https://zenrio.vercel.app/logo.png'
+        url: 'https://www.dojoroom.com/logo.png'
       }
     }
   };
@@ -95,25 +95,25 @@ const Blog = () => {
   return (
     <>
       <Head>
-        <title>Blog ZenRio - Artigos sobre Meditação e Bem-estar</title>
+        <title>Blog DojoRoom - Artigos sobre Meditação e Bem-estar</title>
         <meta
           name='description'
           content='Explore nossos artigos sobre meditação, mindfulness e práticas para bem-estar mental e espiritual.'
         />
 
         {/* Tags Open Graph para compartilhamento em redes sociais */}
-        <meta property='og:title' content='Blog ZenRio - Artigos sobre Meditação e Bem-estar' />
+        <meta property='og:title' content='Blog DojoRoom - Artigos sobre Meditação e Bem-estar' />
         <meta
           property='og:description'
           content='Explore nossos artigos sobre meditação, mindfulness e práticas para bem-estar mental e espiritual.'
         />
         <meta property='og:type' content='website' />
-        <meta property='og:url' content='https://zenrio.vercel.app/blog' />
-        <meta property='og:site_name' content='ZenRio Meditação' />
+        <meta property='og:url' content='https://www.dojoroom.com/blog' />
+        <meta property='og:site_name' content='DojoRoom Meditação' />
 
         {/* Tags Twitter Card */}
         <meta name='twitter:card' content='summary_large_image' />
-        <meta name='twitter:title' content='Blog ZenRio - Artigos sobre Meditação e Bem-estar' />
+        <meta name='twitter:title' content='Blog DojoRoom - Artigos sobre Meditação e Bem-estar' />
         <meta
           name='twitter:description'
           content='Explore nossos artigos sobre meditação, mindfulness e práticas para bem-estar mental e espiritual.'
@@ -124,8 +124,8 @@ const Blog = () => {
           name='keywords'
           content='meditação, mindfulness, bem-estar, zen, budismo, práticas meditativas, saúde mental'
         />
-        <meta name='author' content='ZenRio Meditação' />
-        <link rel='canonical' href='https://zenrio.vercel.app/blog' />
+        <meta name='author' content='DojoRoom Meditação' />
+        <link rel='canonical' href='https://www.dojoroom.com/blog' />
 
         {/* Adicionar Schema.org JSON-LD */}
         <script
@@ -152,7 +152,7 @@ const Blog = () => {
                 className='mb-10 text-center'
               >
                 <h1 className='text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-amber-600 mb-4'>
-                  Blog ZenRio
+                  Blog DojoRoom
                 </h1>
                 <p className='text-lg text-blue-200 max-w-2xl mx-auto'>
                   Explore nossos artigos sobre meditação, mindfulness e práticas para bem-estar

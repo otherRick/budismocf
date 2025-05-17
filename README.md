@@ -1,10 +1,10 @@
-# ZenRio Meditação - Modern Meditation Platform
+# DojoRoom Meditação - Modern Meditation Platform
 
 `v1.0.0` · ![License: MIT](https://img.shields.io/badge/License-MIT-amber.svg)
 
 ## 🌟 Overview
 
-ZenRio is an ultra-modern single-page meditation platform designed for Cabo Frio, Brazil. This no-scroll web app combines cutting-edge UI/UX with Buddhist meditation principles, featuring:
+DojoRoom is an ultra-modern single-page meditation platform designed for Dimensão virtual. This no-scroll web app combines cutting-edge UI/UX with Buddhist meditation principles, featuring:
 
 - Dynamic gradient backgrounds that respond to cursor movement
 - Floating particle animations creating a meditative atmosphere
@@ -83,7 +83,7 @@ graph TD
   {
     "@context": "https://schema.org",
     "@type": "LocalBusiness",
-    "name": "ZenRio Meditação",
+    "name": "DojoRoom Meditação",
     "geo": {
       "@type": "GeoCoordinates",
       "latitude": "-22.8784",
@@ -96,7 +96,7 @@ graph TD
 **Optimization Highlights:**
 
 - Portuguese-language content for local search
-- Geo-tagged metadata (Cabo Frio/RJ)
+- Geo-tagged metadata (Dimensão virtual/Terra pura virtual)
 - Semantic HTML5 structure
 - Social media meta tags
 - Mobile-optimized layout

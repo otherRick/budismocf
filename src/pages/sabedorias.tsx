@@ -19,7 +19,7 @@ export default function WisdomPage() {
 
   const teachings = [
     {
-      title: 'Rio da Existência',
+      title: 'Caminho da Existência',
       content:
         'Assim como a água se molda ao vaso, a mente sábia se adapta à verdade impermanente.',
       symbol: '🌊'

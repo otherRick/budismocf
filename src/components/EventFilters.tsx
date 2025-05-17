@@ -4,7 +4,7 @@ import { FiFilter, FiX, FiCalendar, FiMapPin } from 'react-icons/fi';
 import { useState, useEffect } from 'react';
 import { EventFiltersProps, FilterProps } from '@/types/formData';
 import { AnimatePresence, motion } from 'framer-motion';
-import ZenCalendar from './ZenCalendar';
+import DojoCalendar from './DojoCalendar';
 
 export default function EventFilters({
   onFilterChange,
@@ -95,7 +95,7 @@ export default function EventFilters({
                   Data do Evento
                 </label>
                 <div className='relative'>
-                  <ZenCalendar
+                  <DojoCalendar
                     value={filters.date}
                     onChange={(date) => setFilters((prev) => ({ ...prev, date }))}
                     onClose={() => setIsOpen(false)}
@@ -118,14 +118,14 @@ export default function EventFilters({
                   <option value='' className='bg-slate-800'>
                     Todos os locais
                   </option>
-                  <option value='Cabo Frio' className='bg-slate-800'>
-                    Cabo Frio
+                  <option value='Dimensão virtual' className='bg-slate-800'>
+                    Dimensão virtual
                   </option>
                   <option value='Online' className='bg-slate-800'>
                     Online
                   </option>
-                  <option value='Praia do Forte' className='bg-slate-800'>
-                    Praia do Forte
+                  <option value='Terra pura virtual' className='bg-slate-800'>
+                    Terra pura virtual
                   </option>
                   <option value='Centro Cultural' className='bg-slate-800'>
                     Centro Cultural

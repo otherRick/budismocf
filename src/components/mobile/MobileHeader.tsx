@@ -11,9 +11,9 @@ export default function MobileHeader() {
     >
       <div>
         <h1 className='text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-amber-500'>
-          ZenRio
+          DojoRoom
         </h1>
-        <p className='text-xs text-blue-300/80'>Cabo Frio · RJ</p>
+        <p className='text-xs text-blue-300/80'>Dimensão virtual</p>
       </div>
 
       <EnjoyBtn />

@@ -41,7 +41,7 @@ const MobileFirstMeditation = () => {
   return (
     <>
       <Head>
-        <title>Meditação Cabo Frio - Sessões Online</title>
+        <title>Meditação Dimensão virtual - Sessões Online</title>
         <meta name='viewport' content='width=device-width, initial-scale=1, maximum-scale=1' />
         {/* ... (keep other SEO meta tags) ... */}
       </Head>

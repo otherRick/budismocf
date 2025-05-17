@@ -28,36 +28,74 @@ const LunarPhase = ({ date }: { date: Date }) => {
   );
 };
 
-interface ZenCalendarProps {
+interface DojoCalendarProps {
   value: string;
   onChange: (value: string) => void;
   onClose: () => void;
 }
 
-export default function ZenCalendar({ value, onChange, onClose }: ZenCalendarProps) {
+export default function DojoCalendar({ value, onChange, onClose }: DojoCalendarProps) {
   const [currentDate, setCurrentDate] = useState(new Date());
-  const [temporaryDate, setTemporaryDate] = useState<Date | null>(value ? new Date(value) : null);
+  const [temporaryDate, setTemporaryDate] = useState<Date | null>(null);
+  const [selectedDate, setSelectedDate] = useState<Date | null>(
+    value ? new Date(value) : new Date()
+  );
 
+  // Atualizar o valor selecionado quando o componente é montado
   useEffect(() => {
-    setTemporaryDate(value ? new Date(value) : null);
+    if (value) {
+      setSelectedDate(new Date(value));
+    }
   }, [value]);
 
+  // Navegar para o mês anterior
+  const previousMonth = () => {
+    const prevMonth = new Date(currentDate);
+    prevMonth.setMonth(prevMonth.getMonth() - 1);
+    setCurrentDate(prevMonth);
+  };
+
+  // Navegar para o próximo mês
+  const nextMonth = () => {
+    const nextMonth = new Date(currentDate);
+    nextMonth.setMonth(nextMonth.getMonth() + 1);
+    setCurrentDate(nextMonth);
+  };
+
+  // Confirmar a seleção da data
+  const confirmSelection = () => {
+    if (temporaryDate) {
+      setSelectedDate(temporaryDate);
+      onChange(format(temporaryDate, 'yyyy-MM-dd'));
+      onClose();
+    }
+  };
+
+  // Gerar os dias do mês atual
   const monthStart = startOfMonth(currentDate);
   const monthEnd = endOfMonth(currentDate);
   const daysInMonth = eachDayOfInterval({ start: monthStart, end: monthEnd });
 
-  const handleConfirm = () => {
-    if (temporaryDate) {
-      const isoDate = temporaryDate.toISOString().split('T')[0];
-      onChange(isoDate);
-    }
-    onClose();
+  // Verificar se uma data é hoje
+  const isToday = (date: Date) => {
+    return isSameDay(date, new Date());
   };
 
-  const previousMonth = () =>
-    setCurrentDate(new Date(currentDate.setMonth(currentDate.getMonth() - 1)));
-  const nextMonth = () =>
-    setCurrentDate(new Date(currentDate.setMonth(currentDate.getMonth() + 1)));
+  // Verificar se uma data está no mês atual
+  const isCurrentMonth = (date: Date) => {
+    return isSameMonth(date, currentDate);
+  };
+
+  // Verificar se uma data está selecionada
+  const isSelected = (date: Date) => {
+    if (temporaryDate) {
+      return isSameDay(date, temporaryDate);
+    }
+    if (selectedDate) {
+      return isSameDay(date, selectedDate);
+    }
+    return false;
+  };
 
   return (
     <div className='p-4 md:p-6 backdrop-blur-lg bg-slate-800/30 rounded-2xl border border-slate-700/50 shadow-xl'>
@@ -85,19 +123,22 @@ export default function ZenCalendar({ value, onChange, onClose }: ZenCalendarPro
       </div>
 
       {/* Calendar Grid */}
-      <div className='grid grid-cols-7 gap-1 md:gap-2 mb-2 md:mb-4'>
-        {['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'].map((day) => (
-          <div key={day} className='text-center text-xs md:text-sm text-cyan-400/80 p-1 md:p-2'>
+      <div className='grid grid-cols-7 gap-1 md:gap-2 mb-4 md:mb-6'>
+        {/* Weekday Headers */}
+        {['D', 'S', 'T', 'Q', 'Q', 'S', 'S'].map((day, index) => (
+          <div
+            key={index}
+            className='text-center text-xs md:text-sm font-medium text-cyan-400 p-1 md:p-2'
+          >
             {day}
           </div>
         ))}
-      </div>
 
-      <div className='grid grid-cols-7 gap-1 md:gap-2 mb-4'>
+        {/* Calendar Days */}
         {daysInMonth.map((date, index) => {
-          const isCurrentMonth = isSameMonth(date, currentDate);
-          const isSelected = temporaryDate && isSameDay(date, temporaryDate);
-          const isToday = isSameDay(date, new Date());
+          const isSelectedDay = isSelected(date);
+          const isTodayDay = isToday(date);
+          const isCurrentMonthDay = isCurrentMonth(date);
 
           return (
             <motion.button
@@ -106,28 +147,18 @@ export default function ZenCalendar({ value, onChange, onClose }: ZenCalendarPro
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: index * 0.01 }}
               className={`relative aspect-square p-1 md:p-2 rounded-lg md:rounded-xl text-center transition-all
-                ${isSelected ? 'bg-cyan-500/30 text-cyan-300' : ''}
-                ${isToday ? 'border border-cyan-400/50' : ''}
-                ${isCurrentMonth ? 'text-cyan-200 hover:bg-slate-700/40' : 'text-slate-500'}
+                ${isSelectedDay ? 'bg-cyan-500/30 text-cyan-300' : ''}
+                ${isTodayDay ? 'border border-cyan-400/50' : ''}
+                ${isCurrentMonthDay ? 'text-cyan-200 hover:bg-slate-700/40' : 'text-slate-500'}
               `}
               onClick={() => setTemporaryDate(date)}
             >
               <div className='flex flex-col items-center justify-center h-full'>
-                <span className={`text-xs md:text-sm ${isSelected ? 'font-bold' : ''}`}>
+                <span className={`text-xs md:text-sm ${isSelectedDay ? 'font-bold' : ''}`}>
                   {format(date, 'd')}
                 </span>
                 <LunarPhase date={date} />
               </div>
-
-              {/* Event Dots */}
-              {Math.random() > 0.7 && (
-                <div className='absolute bottom-0.5 md:bottom-1 left-1/2 -translate-x-1/2 flex space-x-1'>
-                  <div className='w-1.5 h-1.5 md:w-2 md:h-2 rounded-full bg-cyan-400/80'></div>
-                  {Math.random() > 0.5 && (
-                    <div className='w-1.5 h-1.5 md:w-2 md:h-2 rounded-full bg-amber-400/80'></div>
-                  )}
-                </div>
-              )}
             </motion.button>
           );
         })}
@@ -148,11 +179,13 @@ export default function ZenCalendar({ value, onChange, onClose }: ZenCalendarPro
 
         <motion.button
           whileHover={{ scale: 1.05 }}
-          onClick={handleConfirm}
-          className='px-4 py-2 bg-cyan-500/20 text-cyan-300 hover:bg-cyan-500/30 rounded-lg flex items-center gap-2 transition-colors'
+          whileTap={{ scale: 0.95 }}
+          onClick={confirmSelection}
+          className='px-4 py-2 bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 rounded-lg flex items-center transition-all'
+          disabled={!temporaryDate}
         >
-          <FiCheck className='flex-shrink-0' />
-          <span className='text-sm'>Confirmar Data</span>
+          <FiCheck className='mr-2' />
+          <span>Confirmar</span>
         </motion.button>
       </div>
     </div>

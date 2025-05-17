@@ -27,7 +27,7 @@ export default function AdminLayout({ children, activeTab }: AdminLayoutProps) {
       <div className='w-64 bg-gray-800 text-white p-4 shadow-lg'>
         <div className='mb-8 p-4'>
           <h1 className='text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-amber-600'>
-            ZenRio Admin
+            DojoRoom Admin
           </h1>
           <p className='text-sm text-blue-300/80'>Painel de Controle</p>
         </div>

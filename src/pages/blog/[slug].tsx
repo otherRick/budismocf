@@ -176,7 +176,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
         updated_at: updated_at_str,
         keywords,
         createdAt,
-        url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://zenrio.vercel.app'}/blog/${slug}`
+        url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://www.dojoroom.com'}/blog/${slug}`
       }
     },
     revalidate: 60 // ISR: Revalida a página a cada 60 segundos
@@ -223,15 +223,15 @@ const ArtigoPage = ({ artigo }: { artigo: Artigo }) => {
     dateModified: artigo.updated_at,
     author: {
       '@type': 'Organization',
-      name: 'ZenRio Meditação',
-      url: 'https://zenrio.vercel.app'
+      name: 'DojoRoom Meditação',
+      url: 'https://www.dojoroom.com'
     },
     publisher: {
       '@type': 'Organization',
-      name: 'ZenRio Meditação',
+      name: 'DojoRoom Meditação',
       logo: {
         '@type': 'ImageObject',
-        url: 'https://zenrio.vercel.app/logo.png' // Substitua pelo caminho real do logo
+        url: 'https://www.dojoroom.com/logo.png' // Substitua pelo caminho real do logo
       }
     },
     mainEntityOfPage: {
@@ -244,7 +244,7 @@ const ArtigoPage = ({ artigo }: { artigo: Artigo }) => {
   return (
     <>
       <Head>
-        <title>{artigo.title} | ZenRio Meditação</title>
+        <title>{artigo.title} | DojoRoom Meditação</title>
         <meta name='description' content={artigo.description} />
 
         {/* Tags Open Graph para compartilhamento em redes sociais */}
@@ -253,7 +253,7 @@ const ArtigoPage = ({ artigo }: { artigo: Artigo }) => {
         <meta property='og:type' content='article' />
         <meta property='og:url' content={canonicalUrl} />
         {artigo.image_url && <meta property='og:image' content={artigo.image_url} />}
-        <meta property='og:site_name' content='ZenRio Meditação' />
+        <meta property='og:site_name' content='DojoRoom Meditação' />
         <meta property='article:published_time' content={artigo.created_at} />
         <meta property='article:modified_time' content={artigo.updated_at} />
 
@@ -265,7 +265,7 @@ const ArtigoPage = ({ artigo }: { artigo: Artigo }) => {
 
         {/* Tags para SEO */}
         <meta name='keywords' content={artigo.keywords} />
-        <meta name='author' content='ZenRio Meditação' />
+        <meta name='author' content='DojoRoom Meditação' />
         <link rel='canonical' href={canonicalUrl} />
 
         {/* Adicionar Schema.org JSON-LD */}

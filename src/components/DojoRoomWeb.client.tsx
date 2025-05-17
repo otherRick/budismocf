@@ -33,7 +33,7 @@ const UltraModernMeditation = () => {
   return (
     <>
       <Head>
-        <title>Meditação Moderna em Cabo Frio - Sessões Online</title>
+        <title>Meditação Moderna na Dimensão virtual - Sessões Online</title>
       </Head>
 
       <PageWrapper>
